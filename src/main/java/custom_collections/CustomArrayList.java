@@ -8,12 +8,21 @@ public class CustomArrayList<T> {
     private Object[] array = new Object[INIT_SIZE];
     int index;
 
+    static Object[] growArray(Object[] array, int index) {
+        Object[] newArray = new Object[array.length * 2];
+        System.arraycopy(array, 0, newArray, 0, index);
+        return newArray;
+    }
+
+    static Object[] smallerArray(Object[] array) {
+        Object[] newArray = new Object[array.length / 2];
+        System.arraycopy(array, 0, newArray, 0, newArray.length);
+        return newArray;
+    }
     public void add(T t) {
-        if (index == array.length - 1) {
-            Object[] newArray = new Object[array.length * 2];
-            System.arraycopy(array, 0, newArray, 0, index);
-            array = newArray;
-        }
+        if (index == array.length - 1)
+            array = growArray(array, index);
+
         array[index++] = t;
     }
 
@@ -33,9 +42,7 @@ public class CustomArrayList<T> {
         array[this.size() - 1] = null;
         index = (this.size() - 1);
         if (array.length > INIT_SIZE && index < array.length / 2) {
-            Object[] newArray = new Object[array.length / 2];
-            System.arraycopy(array, 0, newArray, 0, newArray.length);
-            array = newArray;
+            array = smallerArray(array);
         }
     }
 
